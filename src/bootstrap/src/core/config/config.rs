@@ -207,6 +207,7 @@ pub struct Config {
     pub patch_binaries_for_nix: Option<bool>,
     pub stage0_metadata: build_helper::stage0_parser::Stage0,
     pub android_ndk: Option<PathBuf>,
+    pub exclude: Option<Vec<PathBuf>>,
     /// Whether to use the `c` feature of the `compiler_builtins` crate.
     pub optimized_compiler_builtins: bool,
 
@@ -918,6 +919,7 @@ define_config! {
         dist_stage: Option<u32> = "dist-stage",
         bench_stage: Option<u32> = "bench-stage",
         patch_binaries_for_nix: Option<bool> = "patch-binaries-for-nix",
+        exclude: Option<Vec<PathBuf>> = "exclude",
         // NOTE: only parsed by bootstrap.py, `--feature build-metrics` enables metrics unconditionally
         metrics: Option<bool> = "metrics",
         android_ndk: Option<PathBuf> = "android-ndk",
@@ -1558,6 +1560,7 @@ impl Config {
             dist_stage,
             bench_stage,
             patch_binaries_for_nix,
+            exclude,
             // This field is only used by bootstrap.py
             metrics: _,
             android_ndk,
@@ -1648,6 +1651,7 @@ impl Config {
         config.submodules = submodules;
         config.android_ndk = android_ndk;
         config.bootstrap_cache_path = bootstrap_cache_path;
+        config.exclude = exclude;
         set(&mut config.low_priority, low_priority);
         set(&mut config.compiler_docs, compiler_docs);
         set(&mut config.library_docs_private_items, library_docs_private_items);

@@ -227,6 +227,22 @@ fn override_toml_duplicate() {
 }
 
 #[test]
+fn exclude_from_toml() {
+    let config = Config::parse_inner(
+        Flags::parse(&["check".to_owned(), "--config=/does/not/exist".to_string()]),
+        |&_| {
+            toml::from_str(
+                r#"
+        [build]
+        exclude = ["foo"]
+        "#,
+            )
+        },
+    );
+    assert!(config.exclude.is_some());
+}
+
+#[test]
 fn profile_user_dist() {
     fn get_toml(file: &Path) -> Result<TomlConfig, toml::de::Error> {
         let contents =
